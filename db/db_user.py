@@ -1,3 +1,4 @@
+from fastapi import HTTPException
 from sqlalchemy.orm.session import Session
 
 from db.hash import Hash
@@ -43,3 +44,11 @@ def deleting_user(user_id:int , db: Session):
     db.commit()
 
     return f'{user_id} Deleted Successfully'
+
+
+def get_user_by_name(db : Session, user_name: str):
+    user = db.query(DbUser).filter(DbUser.name == user_name).first()
+    if not user:
+        raise HTTPException(detail=f"{user} Not found in our system ")
+
+    return user
